@@ -1,8 +1,9 @@
 # Nova Studio Capstone
 
-This is my final capstone project for the FlyRank AI Front-end AI Engineering track. 
-It is a modern web application built using AI-assisted development.
+A responsive, modern web application serving as my final capstone project for the FlyRank Frontend AI Engineering track.
+
+🔗 **Live Demo:** [Coming Soon]
 
 ## Tech Stack
-- Frontend: HTML, CSS, JavaScript (MERN Stack progression)
-- AI Tools: Claude / VS Code
+- Frontend: HTML, CSS, JavaScript
+- AI Tools: Claude, VS Code
