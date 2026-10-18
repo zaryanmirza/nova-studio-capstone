@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>User Settings</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="validators.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <h1>User Settings</h1>
+    <p id="form-status" class="status" role="status" aria-live="polite"></p>
+
+    <form id="settings-form" novalidate>
+      <fieldset>
+        <legend>Profile</legend>
+        <div class="grid">
+          <div class="field">
+            <label for="name">Full name <span class="req" aria-hidden="true">*</span></label>
+            <input id="name" name="name" type="text" autocomplete="name" required data-validate aria-describedby="name-error">
+            <p id="name-error" class="error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" required data-validate aria-describedby="email-error">
+            <p id="email-error" class="error" aria-live="polite"></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Password</legend>
+        <p class="hint">Leave blank to keep your current password.</p>
+        <div class="field">
+          <label for="currentPassword">Current password</label>
+          <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" data-validate aria-describedby="currentPassword-error">
+          <p id="currentPassword-error" class="error" aria-live="polite"></p>
+        </div>
+        <div class="grid">
+          <div class="field">
+            <label for="newPassword">New password</label>
+            <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" data-validate aria-describedby="newPassword-hint newPassword-error">
+            <p id="newPassword-hint" class="hint">At least 8 characters.</p>
+            <p id="newPassword-error" class="error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="confirmPassword">Confirm new password</label>
+            <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" data-validate aria-describedby="confirmPassword-error">
+            <p id="confirmPassword-error" class="error" aria-live="polite"></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Preferences</legend>
+        <fieldset>
+          <legend class="sub">Notify me by</legend>
+          <div class="check">
+            <input id="emailAlerts" name="emailAlerts" type="checkbox">
+            <label for="emailAlerts">Email alerts</label>
+          </div>
+          <div class="check">
+            <input id="textAlerts" name="textAlerts" type="checkbox" aria-controls="phone">
+            <label for="textAlerts">Text alerts</label>
+          </div>
+        </fieldset>
+        <div class="grid">
+          <div class="field">
+            <label for="phone">Phone number <span id="phone-req" class="req" aria-hidden="true" hidden>*</span></label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" data-validate aria-describedby="phone-hint phone-error">
+            <p id="phone-hint" class="hint">Required if text alerts are on.</p>
+            <p id="phone-error" class="error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="theme">Theme</label>
+            <select id="theme" name="theme">
+              <option value="system">System default</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <button type="submit">Save settings</button>
+    </form>
+  </main>
+</body>
+</html>

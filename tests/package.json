@@ -1,0 +1,6 @@
+{
+  "name": "user-settings",
+  "private": true,
+  "scripts": { "test": "node --test tests/settings.test.js" },
+  "devDependencies": { "jsdom": "^24.0.0" }
+}
