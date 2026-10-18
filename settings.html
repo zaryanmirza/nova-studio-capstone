@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Account settings</title>
+    <style>
+        :root {
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            --bg: #eef2f1;
+            --surface: #ffffff;
+            --text: #14231f;
+            --muted: #5a6b66;
+            --line: #cfd9d6;
+            --accent: #0f766e;
+            --accent-text: #ffffff;
+            --error: #b42318;
+            --ok: #157347;
+            color-scheme: light;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #0e1816;
+                --surface: #16231f;
+                --text: #e6f0ed;
+                --muted: #9bb0aa;
+                --line: #2c3f3a;
+                --accent: #2dd4bf;
+                --accent-text: #052e29;
+                --error: #ff8a80;
+                --ok: #6ee7a0;
+                color-scheme: dark;
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #0e1816;
+            --surface: #16231f;
+            --text: #e6f0ed;
+            --muted: #9bb0aa;
+            --line: #2c3f3a;
+            --accent: #2dd4bf;
+            --accent-text: #052e29;
+            --error: #ff8a80;
+            --ok: #6ee7a0;
+            color-scheme: dark;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: inherit
+        }
+
+        html {
+            scroll-padding-top: env(safe-area-inset-top, 0px)
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font: 16px/1.5 "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+            padding: 24px 16px
+        }
+
+        .wrap {
+            max-width: 640px;
+            margin: 0 auto
+        }
+
+        h1 {
+            font-size: 1.7rem;
+            margin: 0 0 4px;
+            letter-spacing: -.01em
+        }
+
+        .sub {
+            color: var(--muted);
+            margin: 0 0 20px
+        }
+
+        form {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 8px 24px 24px
+        }
+
+        fieldset {
+            border: 0;
+            border-top: 1px solid var(--line);
+            margin: 0;
+            padding: 20px 0 4px
+        }
+
+        fieldset:first-of-type {
+            border-top: 0
+        }
+
+        legend {
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 0;
+            margin-bottom: 12px;
+            float: left;
+            width: 100%
+        }
+
+        legend+* {
+            clear: both
+        }
+
+        .field {
+            margin-bottom: 16px
+        }
+
+        label,
+        .lbl {
+            display: block;
+            font-weight: 600;
+            font-size: .92rem;
+            margin-bottom: 6px
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: .82rem;
+            margin-top: 4px
+        }
+
+        input[type=text],
+        input[type=email],
+        input[type=password],
+        input[type=tel],
+        input[type=date],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            font: inherit;
+            color: var(--text);
+            background: var(--bg);
+            border: 1.5px solid var(--line);
+            border-radius: 8px
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus,
+        button:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 1px
+        }
+
+        .field.invalid input,
+        .field.invalid select,
+        .field.invalid textarea {
+            border-color: var(--error)
+        }
+
+        .field.valid input,
+        .field.valid textarea {
+            border-color: var(--ok)
+        }
+
+        .error {
+            color: var(--error);
+            font-size: .84rem;
+            margin-top: 4px;
+            min-height: 1.2em
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        @media (max-width:520px) {
+            .row {
+                grid-template-columns: 1fr
+            }
+
+            form {
+                padding: 8px 16px 20px
+            }
+        }
+
+        .pw {
+            position: relative
+        }
+
+        .pw button {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: 0;
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 6px 8px
+        }
+
+        .meter {
+            height: 6px;
+            border-radius: 3px;
+            background: var(--line);
+            margin-top: 8px;
+            overflow: hidden
+        }
+
+        .meter span {
+            display: block;
+            height: 100%;
+            width: 0;
+            background: var(--error);
+            transition: width .2s, background .2s
+        }
+
+        .check {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            margin-bottom: 10px
+        }
+
+        .check input {
+            margin-top: 5px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent)
+        }
+
+        .check label {
+            margin: 0;
+            font-weight: 500
+        }
+
+        .count {
+            text-align: right;
+            color: var(--muted);
+            font-size: .8rem
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap
+        }
+
+        button.primary,
+        button.secondary {
+            font: inherit;
+            font-weight: 700;
+            padding: 11px 22px;
+            border-radius: 8px;
+            cursor: pointer
+        }
+
+        button.primary {
+            background: var(--accent);
+            color: var(--accent-text);
+            border: 0
+        }
+
+        button.secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1.5px solid var(--line)
+        }
+
+        .banner {
+            display: none;
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-weight: 600
+        }
+
+        .banner.ok {
+            display: block;
+            background: rgba(21, 115, 71, .14);
+            color: var(--ok);
+            border: 1px solid var(--ok)
+        }
+
+        .banner.bad {
+            display: block;
+            background: rgba(180, 35, 24, .12);
+            color: var(--error);
+            border: 1px solid var(--error)
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <h1>Account settings</h1>
+        <p class="sub">Update your profile, password and preferences.</p>
+
+        <form id="settings" novalidate>
+            <div id="banner" class="banner" role="status" aria-live="polite"></div>
+
+            <fieldset>
+                <legend>Profile</legend>
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" autocomplete="username" required>
+                    <div class="hint">3–20 characters: letters, numbers and underscores.</div>
+                    <div class="error" id="username-error"></div>
+                </div>
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" autocomplete="email" required>
+                    <div class="error" id="email-error"></div>
+                </div>
+                <div class="row">
+                    <div class="field">
+                        <label for="phone">Phone (optional)</label>
+                        <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="+92 300 1234567">
+                        <div class="error" id="phone-error"></div>
+                    </div>
+                    <div class="field">
+                        <label for="dob">Date of birth</label>
+                        <input type="date" id="dob" name="dob" required>
+                        <div class="error" id="dob-error"></div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="bio">Bio (optional)</label>
+                    <textarea id="bio" name="bio" maxlength="160"></textarea>
+                    <div class="count"><span id="bio-count">0</span>/160</div>
+                    <div class="error" id="bio-error"></div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Password</legend>
+                <p class="hint" style="margin-top:0">Leave blank to keep your current password.</p>
+                <div class="field">
+                    <label for="password">New password</label>
+                    <div class="pw">
+                        <input type="password" id="password" name="password" autocomplete="new-password">
+                        <button type="button" id="toggle-pw" aria-label="Show password">Show</button>
+                    </div>
+                    <div class="meter" aria-hidden="true"><span id="meter-bar"></span></div>
+                    <div class="hint" id="meter-text">At least 8 characters with upper and lower case, a number and a
+                        symbol.</div>
+                    <div class="error" id="password-error"></div>
+                </div>
+                <div class="field">
+                    <label for="confirm">Confirm new password</label>
+                    <input type="password" id="confirm" name="confirm" autocomplete="new-password">
+                    <div class="error" id="confirm-error"></div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Preferences</legend>
+                <div class="row">
+                    <div class="field">
+                        <label for="language">Language</label>
+                        <select id="language" name="language" required>
+                            <option value="">Select a language</option>
+                            <option value="en">English</option>
+                            <option value="ur">Urdu</option>
+                            <option value="ar">Arabic</option>
+                            <option value="fr">French</option>
+                        </select>
+                        <div class="error" id="language-error"></div>
+                    </div>
+                    <div class="field">
+                        <label for="theme">Theme</label>
+                        <select id="theme" name="theme">
+                            <option value="system">Match my device</option>
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="lbl">Notifications</div>
+                <div class="check"><input type="checkbox" id="n-email" checked><label for="n-email">Email me about
+                        account activity</label></div>
+                <div class="check"><input type="checkbox" id="n-news"><label for="n-news">Send me product news</label>
+                </div>
+                <div class="check"><input type="checkbox" id="n-sms"><label for="n-sms">Text me security alerts (needs a
+                        phone number)</label></div>
+                <div class="error" id="n-sms-error"></div>
+            </fieldset>
+
+            <div class="actions">
+                <button type="submit" class="primary">Save changes</button>
+                <button type="reset" class="secondary" id="reset">Reset</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        (function () {
+            var form = document.getElementById('settings');
+            var banner = document.getElementById('banner');
+
+            function $(id) { return document.getElementById(id); }
+
+            function setState(id, message) {
+                var input = $(id);
+                var field = input.closest('.field');
+                var err = $(id + '-error');
+                if (err) err.textContent = message || '';
+                if (field) {
+                    field.classList.toggle('invalid', !!message);
+                    field.classList.toggle('valid', !message && input.value.trim() !== '');
+                }
+                input.setAttribute('aria-invalid', message ? 'true' : 'false');
+                return !message;
+            }
+
+            var rules = {
+                username: function (v) {
+                    if (!v) return 'Enter a username.';
+                    if (!/^[A-Za-z0-9_]{3,20}$/.test(v)) return 'Use 3–20 letters, numbers or underscores.';
+                    return '';
+                },
+                email: function (v) {
+                    if (!v) return 'Enter your email address.';
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return 'Enter a valid email, like name@example.com.';
+                    return '';
+                },
+                phone: function (v) {
+                    if (!v) return '';
+                    if (!/^\+?[0-9\s\-]{10,15}$/.test(v)) return 'Use 10–15 digits. A leading + is allowed.';
+                    return '';
+                },
+                dob: function (v) {
+                    if (!v) return 'Choose your date of birth.';
+                    var d = new Date(v), now = new Date();
+                    if (isNaN(d.getTime()) || d > now) return 'Date of birth can’t be in the future.';
+                    var age = now.getFullYear() - d.getFullYear();
+                    var m = now.getMonth() - d.getMonth();
+                    if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
+                    if (age < 13) return 'You must be at least 13 years old.';
+                    if (age > 120) return 'Enter a realistic date of birth.';
+                    return '';
+                },
+                bio: function (v) {
+                    return v.length > 160 ? 'Keep your bio to 160 characters or fewer.' : '';
+                },
+                password: function (v) {
+                    if (!v) return '';
+                    if (v.length < 8) return 'Use at least 8 characters.';
+                    if (!/[a-z]/.test(v) || !/[A-Z]/.test(v)) return 'Include both upper and lower case letters.';
+                    if (!/[0-9]/.test(v)) return 'Include at least one number.';
+                    if (!/[^A-Za-z0-9]/.test(v)) return 'Include at least one symbol.';
+                    return '';
+                },
+                confirm: function (v) {
+                    var pw = $('password').value;
+                    if (!pw && !v) return '';
+                    if (v !== pw) return 'Passwords don’t match.';
+                    return '';
+                },
+                language: function (v) {
+                    return v ? '' : 'Select a language.';
+                }
+            };
+
+            function validate(id) {
+                var value = $(id).value.trim();
+                if (id === 'password' || id === 'confirm') value = $(id).value;
+                return setState(id, rules[id](value));
+            }
+
+            function validateSms() {
+                var needs = $('n-sms').checked && $('phone').value.trim() === '';
+                $('n-sms-error').textContent = needs ? 'Add a phone number to receive text alerts.' : '';
+                return !needs;
+            }
+
+            Object.keys(rules).forEach(function (id) {
+                var el = $(id);
+                el.addEventListener('blur', function () { validate(id); });
+                el.addEventListener('input', function () {
+                    if (el.closest('.field').classList.contains('invalid')) validate(id);
+                    if (id === 'password') {
+                        updateMeter();
+                        if ($('confirm').value) validate('confirm');
+                    }
+                });
+            });
+            $('n-sms').addEventListener('change', validateSms);
+            $('phone').addEventListener('input', validateSms);
+
+            $('bio').addEventListener('input', function () {
+                $('bio-count').textContent = this.value.length;
+            });
+
+            function updateMeter() {
+                var v = $('password').value, score = 0;
+                if (v.length >= 8) score++;
+                if (/[a-z]/.test(v) && /[A-Z]/.test(v)) score++;
+                if (/[0-9]/.test(v)) score++;
+                if (/[^A-Za-z0-9]/.test(v)) score++;
+                var labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+                var colors = ['', '#b42318', '#d97706', '#0f766e', '#157347'];
+                var bar = $('meter-bar');
+                bar.style.width = (score * 25) + '%';
+                bar.style.background = colors[score] || '';
+                $('meter-text').textContent = v ? 'Password strength: ' + labels[score] :
+                    'At least 8 characters with upper and lower case, a number and a symbol.';
+            }
+
+            $('toggle-pw').addEventListener('click', function () {
+                var pw = $('password'), show = pw.type === 'password';
+                pw.type = show ? 'text' : 'password';
+                $('confirm').type = pw.type;
+                this.textContent = show ? 'Hide' : 'Show';
+                this.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+            });
+
+            function applyTheme(t) {
+                var root = document.documentElement;
+                if (t === 'system') root.removeAttribute('data-theme');
+                else root.setAttribute('data-theme', t);
+            }
+            $('theme').addEventListener('change', function () { applyTheme(this.value); });
+
+            // Max date = today
+            $('dob').max = new Date().toISOString().split('T')[0];
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                banner.className = 'banner';
+                var ids = Object.keys(rules), firstBad = null;
+                ids.forEach(function (id) {
+                    if (!validate(id) && !firstBad) firstBad = $(id);
+                });
+                if (!validateSms() && !firstBad) firstBad = $('n-sms');
+                if (firstBad) {
+                    banner.textContent = 'Fix the highlighted fields and try again.';
+                    banner.className = 'banner bad';
+                    firstBad.focus();
+                    return;
+                }
+                var data = {
+                    username: $('username').value.trim(),
+                    email: $('email').value.trim(),
+                    phone: $('phone').value.trim(),
+                    dob: $('dob').value,
+                    bio: $('bio').value.trim(),
+                    passwordChanged: $('password').value !== '',
+                    language: $('language').value,
+                    theme: $('theme').value,
+                    notifications: {
+                        email: $('n-email').checked,
+                        news: $('n-news').checked,
+                        sms: $('n-sms').checked
+                    }
+                };
+                // In a real app, send `data` to your server here (e.g. with fetch).
+                console.log('Settings saved:', data);
+                banner.textContent = 'Settings saved.';
+                banner.className = 'banner ok';
+                $('password').value = '';
+                $('confirm').value = '';
+                updateMeter();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            form.addEventListener('reset', function () {
+                setTimeout(function () {
+                    Object.keys(rules).forEach(function (id) {
+                        var f = $(id).closest('.field');
+                        f.classList.remove('invalid', 'valid');
+                        var err = $(id + '-error'); if (err) err.textContent = '';
+                    });
+                    $('n-sms-error').textContent = '';
+                    $('bio-count').textContent = '0';
+                    applyTheme('system');
+                    updateMeter();
+                    banner.className = 'banner';
+                }, 0);
+            });
+        })();
+    </script>
+</body>
+
+</html>
